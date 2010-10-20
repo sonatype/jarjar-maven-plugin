@@ -5,3 +5,5 @@ and embed them into your own distribution. This is useful for two reasons:
 
  * You can avoid problems where your library depends on a specific version
    of a library, which may conflict with the dependencies of another library.
+
+Further information is available from http://code.google.com/p/jarjar/
