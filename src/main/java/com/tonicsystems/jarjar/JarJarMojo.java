@@ -16,38 +16,115 @@
 
 package com.tonicsystems.jarjar;
 
-import com.tonicsystems.jarjar.util.*;
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.util.FileUtils;
 
-public class JarJarMojo extends AbstractMojo
+import com.tonicsystems.jarjar.util.StandaloneJarProcessor;
+
+/**
+ * TODO
+ * 
+ * @goal jarjar
+ * @phase package
+ * @requiresDependencyResolution test
+ */
+public class JarJarMojo
+    extends AbstractMojo
 {
-    private File fromJar;
-    private File toJar;
-    private File rulesFile;
-    private String rules;
-    private boolean verbose;
-    
-    public void execute() throws MojoExecutionException {
-        if (!((rulesFile == null || !rulesFile.exists()) ^ (rules == null)))
-            throw new MojoExecutionException("Exactly one of rules or rulesFile is required");
+    /**
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
 
-        try {
-            List<PatternElement> patterns;
-            if (rules != null) {
-                patterns = RulesFileParser.parse(rules);
-            } else {
-                patterns = RulesFileParser.parse(rulesFile);
+    /**
+     * TODO
+     * 
+     * @parameter
+     * @required
+     */
+    private List<PatternElement> rules;
+
+    /**
+     * TODO
+     * 
+     * @parameter default-value="${includes}"
+     */
+    private List<String> includes;
+
+    /**
+     * TODO
+     * 
+     * @parameter default-value="${excludes}"
+     */
+    private List<String> excludes;
+
+    /**
+     * TODO
+     * 
+     * @parameter default-value="${skipManifest}"
+     */
+    private boolean skipManifest;
+
+    /**
+     * @component
+     */
+    private ArchiverManager archiverManager;
+
+    @SuppressWarnings( "unchecked" )
+    public void execute()
+        throws MojoExecutionException
+    {
+        final MainProcessor processor = new MainProcessor( rules, getLog().isDebugEnabled(), skipManifest );
+
+        final File file = project.getArtifact().getFile();
+        final File orig = new File( file.getParentFile(), "original-" + file.getName() );
+        final File uber = new File( file.getParentFile(), "uber-" + file.getName() );
+
+        final AndArtifactFilter filter = new AndArtifactFilter();
+        filter.add( new IncludesArtifactFilter( includes ) );
+        filter.add( new ExcludesArtifactFilter( excludes ) );
+
+        try
+        {
+            final Archiver archiver = archiverManager.getArchiver( "jar" );
+
+            archiver.setDestFile( uber );
+            archiver.setIncludeEmptyDirs( false );
+            archiver.addArchivedFileSet( file );
+
+            for ( final Artifact a : (Set<Artifact>) project.getArtifacts() )
+            {
+                if ( "pom" != a.getType() && filter.include( a ) )
+                {
+                    archiver.addArchivedFileSet( a.getFile() );
+                }
             }
-            // TODO: refactor with Main.java
-            MainProcessor proc = new MainProcessor(patterns, verbose, true);
-            StandaloneJarProcessor.run(fromJar, toJar, proc);
-            proc.strip(toJar);
-        } catch (IOException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+
+            archiver.createArchive();
+
+            FileUtils.rename( file, orig );
+            StandaloneJarProcessor.run( uber, file, processor );
+            processor.strip( file );
+
+            uber.delete();
+        }
+        catch ( final Throwable e )
+        {
+            throw new MojoExecutionException( e.toString() );
         }
     }
 }
