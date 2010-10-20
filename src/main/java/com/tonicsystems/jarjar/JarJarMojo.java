@@ -34,7 +34,7 @@ import org.codehaus.plexus.util.FileUtils;
 import com.tonicsystems.jarjar.util.StandaloneJarProcessor;
 
 /**
- * TODO
+ * Repackage dependencies and embed them into the final artifact.
  * 
  * @goal jarjar
  * @phase package
@@ -51,7 +51,7 @@ public class JarJarMojo
     private MavenProject project;
 
     /**
-     * TODO
+     * List of JarJar rules.
      * 
      * @parameter
      * @required
@@ -59,28 +59,28 @@ public class JarJarMojo
     private List<PatternElement> rules;
 
     /**
-     * TODO
+     * Where to put the JarJar'd archive.
      * 
      * @parameter
      */
     private File outputFile;
 
     /**
-     * TODO
+     * List of "groupId:artifactId" dependencies to include.
      * 
      * @parameter
      */
     private List<String> includes;
 
     /**
-     * TODO
+     * List of "groupId:artifactId" dependencies to exclude.
      * 
      * @parameter
      */
     private List<String> excludes;
 
     /**
-     * TODO
+     * When true, don't JarJar the manifest.
      * 
      * @parameter
      */
@@ -95,12 +95,9 @@ public class JarJarMojo
     public void execute()
         throws MojoExecutionException
     {
+        // SETUP JARJAR
+
         final MainProcessor processor = new MainProcessor( rules, getLog().isDebugEnabled(), skipManifest );
-
-        final File file = project.getArtifact().getFile();
-        final File orig = new File( file.getParentFile(), "original-" + file.getName() );
-        final File uber = new File( file.getParentFile(), "uber-" + file.getName() );
-
         final AndArtifactFilter filter = new AndArtifactFilter();
         if ( null != includes )
         {
@@ -111,8 +108,14 @@ public class JarJarMojo
             filter.add( new ExcludesArtifactFilter( excludes ) );
         }
 
+        final File file = project.getArtifact().getFile();
+        final File orig = new File( file.getParentFile(), "original-" + file.getName() );
+        final File uber = new File( file.getParentFile(), "uber-" + file.getName() );
+
         try
         {
+            // BUILD UBER-JAR OF ARTIFACT + DEPENDENCIES
+
             final Archiver archiver = archiverManager.getArchiver( "jar" );
 
             archiver.setDestFile( uber );
@@ -137,11 +140,15 @@ public class JarJarMojo
 
             archiver.createArchive();
 
+            // BACKUP PREVIOUS ARTIFACT
+
             if ( null == outputFile )
             {
                 FileUtils.rename( file, orig );
                 outputFile = file;
             }
+
+            // JARJAR UBER-JAR
 
             getLog().info( "JarJar'ing to: " + outputFile );
             StandaloneJarProcessor.run( uber, outputFile, processor );
