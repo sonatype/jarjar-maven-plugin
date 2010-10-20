@@ -3,14 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>JarJar Maven Plugin - JarJar Plugin for Maven</title>
+    <title>JarJar Maven Plugin - CPD Results</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
       @import url("./css/site.css");
     </style>
     <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
-      <meta name="author" content="Stuart McCulloch" />
     <meta name="Date-Revision-yyyymmdd" content="20101020" />
     <meta http-equiv="Content-Language" content="en" />
         
@@ -46,8 +45,8 @@
                                 <h5>Overview</h5>
                   <ul>
                   <li class="none">
-            <strong>Introduction</strong>
-          </li>
+                          <a href="index.html" title="Introduction">Introduction</a>
+            </li>
                   <li class="none">
                           <a href="plugin-info.html" title="Goals">Goals</a>
             </li>
@@ -57,9 +56,44 @@
                                                                                                                                                                                 <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
                   </li>
-                                                                                                                                                                                                                                                        <li class="collapsed">
+                                                                                                                                                                                                                                                                  <li class="expanded">
                           <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                  </li>
+                    <ul>
+                      <li class="none">
+                          <a href="checkstyle.html" title="Checkstyle">Checkstyle</a>
+            </li>
+                      <li class="none">
+                          <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
+            </li>
+                      <li class="none">
+            <strong>CPD Report</strong>
+          </li>
+                      <li class="none">
+                          <a href="findbugs.html" title="FindBugs Report">FindBugs Report</a>
+            </li>
+                      <li class="none">
+                          <a href="apidocs/index.html" title="JavaDocs">JavaDocs</a>
+            </li>
+                      <li class="none">
+                          <a href="plugin-info.html" title="Plugin Documentation">Plugin Documentation</a>
+            </li>
+                      <li class="none">
+                          <a href="pmd.html" title="PMD Report">PMD Report</a>
+            </li>
+                      <li class="none">
+                          <a href="xref/index.html" title="Source Xref">Source Xref</a>
+            </li>
+                      <li class="none">
+                          <a href="taglist.html" title="Tag List">Tag List</a>
+            </li>
+                      <li class="none">
+                          <a href="testapidocs/index.html" title="Test JavaDocs">Test JavaDocs</a>
+            </li>
+                      <li class="none">
+                          <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
+            </li>
+              </ul>
+        </li>
           </ul>
                              <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
         <img class="poweredBy" alt="Built by Maven" src="./images/logos/maven-feather.png" />
@@ -70,40 +104,7 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Introduction<a name="Introduction"></a></h2><p>The JarJar Plugin for Maven provides mojos to repackage dependencies inside a project artifact to avoid classpath conflicts. It uses code from the official <a class="externalLink" href="http://code.google.com/p/jarjar/">JarJar</a> project.</p></div><div class="section"><h2>Description<a name="Description"></a></h2><p>Jar Jar Links is a utility that makes it easy to repackage Java libraries and embed them into your own distribution. This is useful for two reasons:</p><ul><li>You can easily ship a single jar file with no external dependencies.</li><li>You can avoid problems where your library depends on a specific version of a library, which may conflict with the dependencies of another library.</li></ul></div><div class="section"><h2>Usage<a name="Usage"></a></h2><div class="section"><h3>jarjar<a name="jarjar"></a></h3><p>This example is taken from the <tt>sisu-guice</tt> project, which embeds ASM and CGLIB.</p><div class="source"><pre>  &lt;build&gt;
-    ...
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.sonatype.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;jarjar-maven-plugin&lt;/artifactId&gt;
-        &lt;executions&gt;
-          &lt;execution&gt;
-            &lt;phase&gt;package&lt;/phase&gt;
-            &lt;goals&gt;
-              &lt;goal&gt;jarjar&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-              &lt;includes&gt;
-                &lt;include&gt;asm:asm&lt;/include&gt;
-                &lt;include&gt;org.sonatype.sisu.inject:cglib&lt;/include&gt;
-              &lt;/includes&gt;
-              &lt;rules&gt;
-                &lt;rule&gt;
-                  &lt;pattern&gt;org.objectweb.asm.**&lt;/pattern&gt;
-                  &lt;result&gt;com.google.inject.internal.asm.@1&lt;/result&gt;
-                &lt;/rule&gt;
-                &lt;rule&gt;
-                  &lt;pattern&gt;net.sf.cglib.**&lt;/pattern&gt;
-                  &lt;result&gt;com.google.inject.internal.cglib.@1&lt;/result&gt;
-                &lt;/rule&gt;
-                &lt;keep&gt;
-                  &lt;pattern&gt;com.google.inject.**&lt;/pattern&gt;
-                &lt;/keep&gt;
-              &lt;/rules&gt;
-            &lt;/configuration&gt;
-          &lt;/execution&gt;
-        &lt;/executions&gt;
-      &lt;/plugin&gt;
-    ...</pre></div></div></div>
+        <div class="section"><h2>CPD Results<a name="CPD_Results"></a></h2><p>The following document contains the results of PMD's  <a class="externalLink" href="http://pmd.sourceforge.net/cpd.html">CPD</a> 4.2.2.</p></div><div class="section"><h2>Duplications<a name="Duplications"></a></h2>CPD found no problems in your source code.</div>
       </div>
     </div>
     <div class="clear">

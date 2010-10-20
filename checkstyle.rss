@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>JarJar Maven Plugin - Checkstyle report</title>
+    <link>http://github.com/sonatype/jarjar-maven-plugin</link>
+    <description>JarJar Maven Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2010 Sonatype, Inc.</copyright>
+    <item>
+      <title>File: 40,
+             Errors: 951,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.RuntimeIOException.java">com/tonicsystems/jarjar/util/RuntimeIOException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.IoUtil.java">com/tonicsystems/jarjar/util/IoUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.Rule.java">com/tonicsystems/jarjar/Rule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.RulesFileParser.java">com/tonicsystems/jarjar/RulesFileParser.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.EntryStruct.java">com/tonicsystems/jarjar/util/EntryStruct.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.JarJarTask.java">com/tonicsystems/jarjar/JarJarTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.DepHandler.java">com/tonicsystems/jarjar/DepHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.KeepProcessor.java">com/tonicsystems/jarjar/KeepProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  49
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.ClassHeaderReader.java">com/tonicsystems/jarjar/util/ClassHeaderReader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  107
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.AbstractDepHandler.java">com/tonicsystems/jarjar/AbstractDepHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.StringDumper.java">com/tonicsystems/jarjar/StringDumper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.PatternElement.java">com/tonicsystems/jarjar/PatternElement.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.MainUtil.java">com/tonicsystems/jarjar/MainUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.JarProcessor.java">com/tonicsystems/jarjar/util/JarProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.ManifestProcessor.java">com/tonicsystems/jarjar/ManifestProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.ResourceProcessor.java">com/tonicsystems/jarjar/ResourceProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.StandaloneJarProcessor.java">com/tonicsystems/jarjar/util/StandaloneJarProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.MainProcessor.java">com/tonicsystems/jarjar/MainProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.GetNameClassWriter.java">com/tonicsystems/jarjar/util/GetNameClassWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.ExcludeProcessor.java">com/tonicsystems/jarjar/ExcludeProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.ClassTransformer.java">com/tonicsystems/jarjar/util/ClassTransformer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.RemappingClassTransformer.java">com/tonicsystems/jarjar/util/RemappingClassTransformer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.JarTransformer.java">com/tonicsystems/jarjar/util/JarTransformer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.JarProcessorChain.java">com/tonicsystems/jarjar/util/JarProcessorChain.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.ClassPathIterator.java">com/tonicsystems/jarjar/util/ClassPathIterator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  78
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.JarTransformerChain.java">com/tonicsystems/jarjar/util/JarTransformerChain.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.ClassPathEntry.java">com/tonicsystems/jarjar/util/ClassPathEntry.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.ZapProcessor.java">com/tonicsystems/jarjar/ZapProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.DepFind.java">com/tonicsystems/jarjar/DepFind.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.Wildcard.java">com/tonicsystems/jarjar/Wildcard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  51
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.TextDepHandler.java">com/tonicsystems/jarjar/TextDepHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.Zap.java">com/tonicsystems/jarjar/Zap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.StringReader.java">com/tonicsystems/jarjar/StringReader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.DepFindVisitor.java">com/tonicsystems/jarjar/DepFindVisitor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.util.AntJarProcessor.java">com/tonicsystems/jarjar/util/AntJarProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  57
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.PathClass.java">com/tonicsystems/jarjar/PathClass.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.Keep.java">com/tonicsystems/jarjar/Keep.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.Main.java">com/tonicsystems/jarjar/Main.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.JarJarMojo.java">com/tonicsystems/jarjar/JarJarMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/sonatype/jarjar-maven-plugin/checkstyle.html#com.tonicsystems.jarjar.PackageRemapper.java">com/tonicsystems/jarjar/PackageRemapper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
