@@ -41,17 +41,17 @@ Usage
             </goals>
             <configuration>
               <includes>
-                <include>org.sonatype.sisu.inject:cglib</include>
                 <include>asm:asm</include>
+                <include>org.sonatype.sisu.inject:cglib</include>
               </includes>
               <rules>
                 <rule>
-                  <pattern>net.sf.cglib.**</pattern>
-                  <result>com.google.inject.internal.cglib.@1</result>
-                </rule>
-                <rule>
                   <pattern>org.objectweb.asm.**</pattern>
                   <result>com.google.inject.internal.asm.@1</result>
+                </rule>
+                <rule>
+                  <pattern>net.sf.cglib.**</pattern>
+                  <result>com.google.inject.internal.cglib.@1</result>
                 </rule>
                 <keep>
                   <pattern>com.google.inject.**</pattern>
