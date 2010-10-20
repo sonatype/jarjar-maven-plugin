@@ -61,21 +61,28 @@ public class JarJarMojo
     /**
      * TODO
      * 
-     * @parameter default-value="${includes}"
+     * @parameter
+     */
+    private File outputFile;
+
+    /**
+     * TODO
+     * 
+     * @parameter
      */
     private List<String> includes;
 
     /**
      * TODO
      * 
-     * @parameter default-value="${excludes}"
+     * @parameter
      */
     private List<String> excludes;
 
     /**
      * TODO
      * 
-     * @parameter default-value="${skipManifest}"
+     * @parameter
      */
     private boolean skipManifest;
 
@@ -95,8 +102,14 @@ public class JarJarMojo
         final File uber = new File( file.getParentFile(), "uber-" + file.getName() );
 
         final AndArtifactFilter filter = new AndArtifactFilter();
-        filter.add( new IncludesArtifactFilter( includes ) );
-        filter.add( new ExcludesArtifactFilter( excludes ) );
+        if ( null != includes )
+        {
+            filter.add( new IncludesArtifactFilter( includes ) );
+        }
+        if ( null != excludes )
+        {
+            filter.add( new ExcludesArtifactFilter( excludes ) );
+        }
 
         try
         {
@@ -108,17 +121,31 @@ public class JarJarMojo
 
             for ( final Artifact a : (Set<Artifact>) project.getArtifacts() )
             {
-                if ( "pom" != a.getType() && filter.include( a ) )
+                if ( filter.include( a ) )
                 {
-                    archiver.addArchivedFileSet( a.getFile() );
+                    try
+                    {
+                        archiver.addArchivedFileSet( a.getFile() );
+                    }
+                    catch ( final Throwable e )
+                    {
+                        getLog().info( "Ignoring: " + a );
+                        getLog().debug( e );
+                    }
                 }
             }
 
             archiver.createArchive();
 
-            FileUtils.rename( file, orig );
-            StandaloneJarProcessor.run( uber, file, processor );
-            processor.strip( file );
+            if ( null == outputFile )
+            {
+                FileUtils.rename( file, orig );
+                outputFile = file;
+            }
+
+            getLog().info( "JarJar'ing to: " + outputFile );
+            StandaloneJarProcessor.run( uber, outputFile, processor );
+            processor.strip( outputFile );
 
             uber.delete();
         }
