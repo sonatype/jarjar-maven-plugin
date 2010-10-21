@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-10-20T19:39:56.058">
+<pmd version="4.2.2" timestamp="2010-10-21T15:26:53.598">
 <file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/DepFind.java">
 <violation beginline="22" endline="22" begincolumn="1" endcolumn="30" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.util.zip.ZipEntry'
