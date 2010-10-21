@@ -116,7 +116,7 @@ public class JarJarMojo
         {
             // BUILD UBER-JAR OF ARTIFACT + DEPENDENCIES
 
-            final Archiver archiver = archiverManager.getArchiver( "jar" );
+            final Archiver archiver = archiverManager.getArchiver( "zip" );
 
             archiver.setDestFile( uber );
             archiver.setIncludeEmptyDirs( false );
