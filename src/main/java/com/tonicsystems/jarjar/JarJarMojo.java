@@ -144,7 +144,7 @@ public class JarJarMojo
 
             if ( null == outputFile )
             {
-                FileUtils.rename( file, orig );
+                FileUtils.copyFile( file, orig );
                 outputFile = file;
             }
 
