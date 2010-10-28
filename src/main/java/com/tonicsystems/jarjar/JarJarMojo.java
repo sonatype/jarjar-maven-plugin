@@ -28,6 +28,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -51,6 +52,13 @@ public class JarJarMojo
     private MavenProject project;
 
     /**
+     * @parameter expression="${project.build.directory}/jarjar"
+     * @required
+     * @readonly
+     */
+    private File workingDirectory;
+
+    /**
      * List of JarJar rules.
      * 
      * @parameter
@@ -59,7 +67,14 @@ public class JarJarMojo
     private List<PatternElement> rules;
 
     /**
-     * Where to put the JarJar'd archive.
+     * Where to get the original classes.
+     * 
+     * @parameter
+     */
+    private File inputFile;
+
+    /**
+     * Where to put the JarJar'd classes.
      * 
      * @parameter
      */
@@ -95,32 +110,58 @@ public class JarJarMojo
     public void execute()
         throws MojoExecutionException
     {
-        // SETUP JARJAR
-
-        final MainProcessor processor = new MainProcessor( rules, getLog().isDebugEnabled(), skipManifest );
-        final AndArtifactFilter filter = new AndArtifactFilter();
-        if ( null != includes )
-        {
-            filter.add( new IncludesArtifactFilter( includes ) );
-        }
-        if ( null != excludes )
-        {
-            filter.add( new ExcludesArtifactFilter( excludes ) );
-        }
-
-        final File file = project.getArtifact().getFile();
-        final File orig = new File( file.getParentFile(), "original-" + file.getName() );
-        final File uber = new File( file.getParentFile(), "uber-" + file.getName() );
-
         try
         {
-            // BUILD UBER-JAR OF ARTIFACT + DEPENDENCIES
+            // VALIDATE INPUT / OUTPUT
 
+            if ( null == inputFile )
+            {
+                if ( null != project.getArtifact() )
+                {
+                    inputFile = project.getArtifact().getFile();
+                }
+                if ( null == inputFile )
+                {
+                    getLog().info( "Nothing to process" );
+                    return;
+                }
+            }
+            if ( null == outputFile )
+            {
+                outputFile = inputFile;
+            }
+
+            // SETUP JARJAR
+
+            final MainProcessor processor = new MainProcessor( rules, getLog().isDebugEnabled(), skipManifest );
+            final AndArtifactFilter filter = new AndArtifactFilter();
+            if ( null != includes )
+            {
+                filter.add( new IncludesArtifactFilter( includes ) );
+            }
+            if ( null != excludes )
+            {
+                filter.add( new ExcludesArtifactFilter( excludes ) );
+            }
+
+            // BUILD UBER-ZIP OF ARTIFACT + DEPENDENCIES
+
+            getLog().info( "Processing: " + inputFile );
+
+            final File uberZip = new File( workingDirectory, "uber-" + inputFile.getName() );
             final Archiver archiver = archiverManager.getArchiver( "zip" );
 
-            archiver.setDestFile( uber );
+            archiver.setDestFile( uberZip );
             archiver.setIncludeEmptyDirs( false );
-            archiver.addArchivedFileSet( file );
+
+            if ( inputFile.isDirectory() )
+            {
+                archiver.addDirectory( inputFile );
+            }
+            else
+            {
+                archiver.addArchivedFileSet( inputFile );
+            }
 
             for ( final Artifact a : (Set<Artifact>) project.getArtifacts() )
             {
@@ -140,21 +181,43 @@ public class JarJarMojo
 
             archiver.createArchive();
 
-            // BACKUP PREVIOUS ARTIFACT
-
-            if ( null == outputFile )
-            {
-                FileUtils.copyFile( file, orig );
-                outputFile = file;
-            }
-
-            // JARJAR UBER-JAR
+            // JARJAR UBER-ZIP
 
             getLog().info( "JarJar'ing to: " + outputFile );
-            StandaloneJarProcessor.run( uber, outputFile, processor );
-            processor.strip( outputFile );
 
-            uber.delete();
+            final File hullZip = new File( workingDirectory, "hull-" + inputFile.getName() );
+
+            StandaloneJarProcessor.run( uberZip, hullZip, processor );
+            processor.strip( hullZip );
+
+            final boolean toDirectory = outputFile.isDirectory() || !outputFile.exists() && inputFile.isDirectory();
+
+            if ( inputFile.equals( outputFile ) )
+            {
+                try
+                {
+                    final File backupFile = new File( outputFile.getParentFile(), "original-" + outputFile.getName() );
+                    getLog().info( "Original: " + backupFile );
+                    FileUtils.rename( outputFile, backupFile );
+                }
+                catch ( final Throwable e )
+                {
+                    getLog().warn( e.toString() );
+                }
+            }
+
+            if ( toDirectory )
+            {
+                outputFile.mkdirs();
+                final UnArchiver unarchiver = archiverManager.getUnArchiver( "zip" );
+                unarchiver.setDestDirectory( outputFile );
+                unarchiver.setSourceFile( hullZip );
+                unarchiver.extract();
+            }
+            else
+            {
+                FileUtils.copyFile( hullZip, outputFile );
+            }
         }
         catch ( final Throwable e )
         {
