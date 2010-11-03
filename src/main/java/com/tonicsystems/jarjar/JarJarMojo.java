@@ -22,11 +22,11 @@ import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
+import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
@@ -52,9 +52,8 @@ public class JarJarMojo
     private MavenProject project;
 
     /**
-     * @parameter expression="${project.build.directory}/jarjar"
+     * @parameter default-value="${project.build.directory}/jarjar"
      * @required
-     * @readonly
      */
     private File workingDirectory;
 
@@ -71,14 +70,14 @@ public class JarJarMojo
      * 
      * @parameter
      */
-    private File inputFile;
+    private String input;
 
     /**
      * Where to put the JarJar'd classes.
      * 
      * @parameter
      */
-    private File outputFile;
+    private String output;
 
     /**
      * List of "groupId:artifactId" dependencies to include.
@@ -114,22 +113,31 @@ public class JarJarMojo
         {
             // VALIDATE INPUT / OUTPUT
 
-            if ( null == inputFile )
+            if ( null == input && null != project.getArtifact() )
             {
-                if ( null != project.getArtifact() )
-                {
-                    inputFile = project.getArtifact().getFile();
-                }
-                if ( null == inputFile )
-                {
-                    getLog().info( "Nothing to process" );
-                    return;
-                }
+                input = project.getArtifact().getFile().getAbsolutePath();
             }
-            if ( null == outputFile )
+            if ( "{classes}".equals( input ) )
             {
-                outputFile = inputFile;
+                input = project.getBuild().getOutputDirectory();
             }
+            if ( "{test-classes}".equals( input ) )
+            {
+                input = project.getBuild().getTestOutputDirectory();
+            }
+            if ( null == input || !new File( input ).exists() )
+            {
+                getLog().info( "Nothing to process" );
+                return;
+            }
+
+            if ( null == output )
+            {
+                output = input;
+            }
+
+            final File inputFile = new File( input );
+            final File outputFile = new File( output );
 
             // SETUP JARJAR
 
@@ -137,11 +145,11 @@ public class JarJarMojo
             final AndArtifactFilter filter = new AndArtifactFilter();
             if ( null != includes )
             {
-                filter.add( new IncludesArtifactFilter( includes ) );
+                filter.add( new StrictPatternIncludesArtifactFilter( includes ) );
             }
             if ( null != excludes )
             {
-                filter.add( new ExcludesArtifactFilter( excludes ) );
+                filter.add( new StrictPatternExcludesArtifactFilter( excludes ) );
             }
 
             // BUILD UBER-ZIP OF ARTIFACT + DEPENDENCIES
@@ -221,7 +229,7 @@ public class JarJarMojo
         }
         catch ( final Throwable e )
         {
-            throw new MojoExecutionException( e.toString() );
+            throw new MojoExecutionException( "Unable to JarJar: " + input, e );
         }
     }
 }
