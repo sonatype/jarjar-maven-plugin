@@ -177,7 +177,7 @@ public class JarJarMojo
                 {
                     try
                     {
-                        archiver.addArchivedFileSet( a.getFile() );
+                        archiver.addArchivedFileSet( a.getFile(), null, new String[] { "META-INF/MANIFEST.MF" } );
                     }
                     catch ( final Throwable e )
                     {
