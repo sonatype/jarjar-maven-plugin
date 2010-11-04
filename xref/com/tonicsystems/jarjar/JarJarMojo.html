@@ -32,146 +32,223 @@
 <a name="22" href="#22">22</a>  
 <a name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.Artifact;
 <a name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
-<a name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
-<a name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
-<a name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.AbstractMojo;
-<a name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
-<a name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.project.MavenProject;
+<a name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.AbstractMojo;
+<a name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
+<a name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.project.MavenProject;
+<a name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
+<a name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 <a name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.archiver.Archiver;
-<a name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.archiver.manager.ArchiverManager;
-<a name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.FileUtils;
-<a name="33" href="#33">33</a>  
-<a name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.tonicsystems.jarjar.util.StandaloneJarProcessor;
-<a name="35" href="#35">35</a>  
-<a name="36" href="#36">36</a>  <em class="jxr_javadoccomment">/**</em>
-<a name="37" href="#37">37</a>  <em class="jxr_javadoccomment"> * Repackage dependencies and embed them into the final artifact.</em>
-<a name="38" href="#38">38</a>  <em class="jxr_javadoccomment"> * </em>
-<a name="39" href="#39">39</a>  <em class="jxr_javadoccomment"> * @goal jarjar</em>
-<a name="40" href="#40">40</a>  <em class="jxr_javadoccomment"> * @phase package</em>
-<a name="41" href="#41">41</a>  <em class="jxr_javadoccomment"> * @requiresDependencyResolution test</em>
-<a name="42" href="#42">42</a>  <em class="jxr_javadoccomment"> */</em>
-<a name="43" href="#43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/tonicsystems/jarjar/JarJarMojo.html">JarJarMojo</a>
-<a name="44" href="#44">44</a>      <strong class="jxr_keyword">extends</strong> AbstractMojo
-<a name="45" href="#45">45</a>  {
-<a name="46" href="#46">46</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="47" href="#47">47</a>  <em class="jxr_javadoccomment">     * @parameter expression="${project}"</em>
-<a name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     * @required</em>
-<a name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * @readonly</em>
-<a name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="51" href="#51">51</a>      <strong class="jxr_keyword">private</strong> MavenProject project;
-<a name="52" href="#52">52</a>  
-<a name="53" href="#53">53</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="54" href="#54">54</a>  <em class="jxr_javadoccomment">     * List of JarJar rules.</em>
-<a name="55" href="#55">55</a>  <em class="jxr_javadoccomment">     * </em>
-<a name="56" href="#56">56</a>  <em class="jxr_javadoccomment">     * @parameter</em>
-<a name="57" href="#57">57</a>  <em class="jxr_javadoccomment">     * @required</em>
-<a name="58" href="#58">58</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="59" href="#59">59</a>      <strong class="jxr_keyword">private</strong> List&lt;PatternElement&gt; rules;
-<a name="60" href="#60">60</a>  
-<a name="61" href="#61">61</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="62" href="#62">62</a>  <em class="jxr_javadoccomment">     * Where to put the JarJar'd archive.</em>
-<a name="63" href="#63">63</a>  <em class="jxr_javadoccomment">     * </em>
-<a name="64" href="#64">64</a>  <em class="jxr_javadoccomment">     * @parameter</em>
+<a name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.archiver.UnArchiver;
+<a name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.archiver.manager.ArchiverManager;
+<a name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.FileUtils;
+<a name="34" href="#34">34</a>  
+<a name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.tonicsystems.jarjar.util.StandaloneJarProcessor;
+<a name="36" href="#36">36</a>  
+<a name="37" href="#37">37</a>  <em class="jxr_javadoccomment">/**</em>
+<a name="38" href="#38">38</a>  <em class="jxr_javadoccomment"> * Repackage dependencies and embed them into the final artifact.</em>
+<a name="39" href="#39">39</a>  <em class="jxr_javadoccomment"> * </em>
+<a name="40" href="#40">40</a>  <em class="jxr_javadoccomment"> * @goal jarjar</em>
+<a name="41" href="#41">41</a>  <em class="jxr_javadoccomment"> * @phase package</em>
+<a name="42" href="#42">42</a>  <em class="jxr_javadoccomment"> * @requiresDependencyResolution test</em>
+<a name="43" href="#43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a name="44" href="#44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/tonicsystems/jarjar/JarJarMojo.html">JarJarMojo</a>
+<a name="45" href="#45">45</a>      <strong class="jxr_keyword">extends</strong> AbstractMojo
+<a name="46" href="#46">46</a>  {
+<a name="47" href="#47">47</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     * @parameter expression="${project}"</em>
+<a name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * @required</em>
+<a name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     * @readonly</em>
+<a name="51" href="#51">51</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="52" href="#52">52</a>      <strong class="jxr_keyword">private</strong> MavenProject project;
+<a name="53" href="#53">53</a>  
+<a name="54" href="#54">54</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="55" href="#55">55</a>  <em class="jxr_javadoccomment">     * @parameter default-value="${project.build.directory}/jarjar"</em>
+<a name="56" href="#56">56</a>  <em class="jxr_javadoccomment">     * @required</em>
+<a name="57" href="#57">57</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="58" href="#58">58</a>      <strong class="jxr_keyword">private</strong> File workingDirectory;
+<a name="59" href="#59">59</a>  
+<a name="60" href="#60">60</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="61" href="#61">61</a>  <em class="jxr_javadoccomment">     * List of JarJar rules.</em>
+<a name="62" href="#62">62</a>  <em class="jxr_javadoccomment">     * </em>
+<a name="63" href="#63">63</a>  <em class="jxr_javadoccomment">     * @parameter</em>
+<a name="64" href="#64">64</a>  <em class="jxr_javadoccomment">     * @required</em>
 <a name="65" href="#65">65</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="66" href="#66">66</a>      <strong class="jxr_keyword">private</strong> File outputFile;
+<a name="66" href="#66">66</a>      <strong class="jxr_keyword">private</strong> List&lt;PatternElement&gt; rules;
 <a name="67" href="#67">67</a>  
 <a name="68" href="#68">68</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="69" href="#69">69</a>  <em class="jxr_javadoccomment">     * List of "groupId:artifactId" dependencies to include.</em>
+<a name="69" href="#69">69</a>  <em class="jxr_javadoccomment">     * Where to get the original classes.</em>
 <a name="70" href="#70">70</a>  <em class="jxr_javadoccomment">     * </em>
 <a name="71" href="#71">71</a>  <em class="jxr_javadoccomment">     * @parameter</em>
 <a name="72" href="#72">72</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="73" href="#73">73</a>      <strong class="jxr_keyword">private</strong> List&lt;String&gt; includes;
+<a name="73" href="#73">73</a>      <strong class="jxr_keyword">private</strong> String input;
 <a name="74" href="#74">74</a>  
 <a name="75" href="#75">75</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="76" href="#76">76</a>  <em class="jxr_javadoccomment">     * List of "groupId:artifactId" dependencies to exclude.</em>
+<a name="76" href="#76">76</a>  <em class="jxr_javadoccomment">     * Where to put the JarJar'd classes.</em>
 <a name="77" href="#77">77</a>  <em class="jxr_javadoccomment">     * </em>
 <a name="78" href="#78">78</a>  <em class="jxr_javadoccomment">     * @parameter</em>
 <a name="79" href="#79">79</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="80" href="#80">80</a>      <strong class="jxr_keyword">private</strong> List&lt;String&gt; excludes;
+<a name="80" href="#80">80</a>      <strong class="jxr_keyword">private</strong> String output;
 <a name="81" href="#81">81</a>  
 <a name="82" href="#82">82</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="83" href="#83">83</a>  <em class="jxr_javadoccomment">     * When true, don't JarJar the manifest.</em>
+<a name="83" href="#83">83</a>  <em class="jxr_javadoccomment">     * List of "groupId:artifactId" dependencies to include.</em>
 <a name="84" href="#84">84</a>  <em class="jxr_javadoccomment">     * </em>
 <a name="85" href="#85">85</a>  <em class="jxr_javadoccomment">     * @parameter</em>
 <a name="86" href="#86">86</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="87" href="#87">87</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> skipManifest;
+<a name="87" href="#87">87</a>      <strong class="jxr_keyword">private</strong> List&lt;String&gt; includes;
 <a name="88" href="#88">88</a>  
 <a name="89" href="#89">89</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="90" href="#90">90</a>  <em class="jxr_javadoccomment">     * @component</em>
-<a name="91" href="#91">91</a>  <em class="jxr_javadoccomment">     */</em>
-<a name="92" href="#92">92</a>      <strong class="jxr_keyword">private</strong> ArchiverManager archiverManager;
-<a name="93" href="#93">93</a>  
-<a name="94" href="#94">94</a>      @SuppressWarnings( <span class="jxr_string">"unchecked"</span> )
-<a name="95" href="#95">95</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute()
-<a name="96" href="#96">96</a>          <strong class="jxr_keyword">throws</strong> MojoExecutionException
-<a name="97" href="#97">97</a>      {
-<a name="98" href="#98">98</a>          <em class="jxr_comment">// SETUP JARJAR</em>
-<a name="99" href="#99">99</a>  
-<a name="100" href="#100">100</a>         <strong class="jxr_keyword">final</strong> <a href="../../../com/tonicsystems/jarjar/MainProcessor.html">MainProcessor</a> processor = <strong class="jxr_keyword">new</strong> <a href="../../../com/tonicsystems/jarjar/MainProcessor.html">MainProcessor</a>( rules, getLog().isDebugEnabled(), skipManifest );
-<a name="101" href="#101">101</a>         <strong class="jxr_keyword">final</strong> AndArtifactFilter filter = <strong class="jxr_keyword">new</strong> AndArtifactFilter();
-<a name="102" href="#102">102</a>         <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> != includes )
-<a name="103" href="#103">103</a>         {
-<a name="104" href="#104">104</a>             filter.add( <strong class="jxr_keyword">new</strong> IncludesArtifactFilter( includes ) );
-<a name="105" href="#105">105</a>         }
-<a name="106" href="#106">106</a>         <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> != excludes )
-<a name="107" href="#107">107</a>         {
-<a name="108" href="#108">108</a>             filter.add( <strong class="jxr_keyword">new</strong> ExcludesArtifactFilter( excludes ) );
-<a name="109" href="#109">109</a>         }
-<a name="110" href="#110">110</a> 
-<a name="111" href="#111">111</a>         <strong class="jxr_keyword">final</strong> File file = project.getArtifact().getFile();
-<a name="112" href="#112">112</a>         <strong class="jxr_keyword">final</strong> File orig = <strong class="jxr_keyword">new</strong> File( file.getParentFile(), <span class="jxr_string">"original-"</span> + file.getName() );
-<a name="113" href="#113">113</a>         <strong class="jxr_keyword">final</strong> File uber = <strong class="jxr_keyword">new</strong> File( file.getParentFile(), <span class="jxr_string">"uber-"</span> + file.getName() );
-<a name="114" href="#114">114</a> 
-<a name="115" href="#115">115</a>         <strong class="jxr_keyword">try</strong>
-<a name="116" href="#116">116</a>         {
-<a name="117" href="#117">117</a>             <em class="jxr_comment">// BUILD UBER-JAR OF ARTIFACT + DEPENDENCIES</em>
-<a name="118" href="#118">118</a> 
-<a name="119" href="#119">119</a>             <strong class="jxr_keyword">final</strong> Archiver archiver = archiverManager.getArchiver( <span class="jxr_string">"zip"</span> );
-<a name="120" href="#120">120</a> 
-<a name="121" href="#121">121</a>             archiver.setDestFile( uber );
-<a name="122" href="#122">122</a>             archiver.setIncludeEmptyDirs( false );
-<a name="123" href="#123">123</a>             archiver.addArchivedFileSet( file );
-<a name="124" href="#124">124</a> 
-<a name="125" href="#125">125</a>             <strong class="jxr_keyword">for</strong> ( <strong class="jxr_keyword">final</strong> Artifact a : (Set&lt;Artifact&gt;) project.getArtifacts() )
-<a name="126" href="#126">126</a>             {
-<a name="127" href="#127">127</a>                 <strong class="jxr_keyword">if</strong> ( filter.include( a ) )
-<a name="128" href="#128">128</a>                 {
-<a name="129" href="#129">129</a>                     <strong class="jxr_keyword">try</strong>
-<a name="130" href="#130">130</a>                     {
-<a name="131" href="#131">131</a>                         archiver.addArchivedFileSet( a.getFile() );
-<a name="132" href="#132">132</a>                     }
-<a name="133" href="#133">133</a>                     <strong class="jxr_keyword">catch</strong> ( <strong class="jxr_keyword">final</strong> Throwable e )
-<a name="134" href="#134">134</a>                     {
-<a name="135" href="#135">135</a>                         getLog().info( <span class="jxr_string">"Ignoring: "</span> + a );
-<a name="136" href="#136">136</a>                         getLog().debug( e );
-<a name="137" href="#137">137</a>                     }
-<a name="138" href="#138">138</a>                 }
-<a name="139" href="#139">139</a>             }
-<a name="140" href="#140">140</a> 
-<a name="141" href="#141">141</a>             archiver.createArchive();
-<a name="142" href="#142">142</a> 
-<a name="143" href="#143">143</a>             <em class="jxr_comment">// BACKUP PREVIOUS ARTIFACT</em>
-<a name="144" href="#144">144</a> 
-<a name="145" href="#145">145</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> == outputFile )
-<a name="146" href="#146">146</a>             {
-<a name="147" href="#147">147</a>                 FileUtils.copyFile( file, orig );
-<a name="148" href="#148">148</a>                 outputFile = file;
-<a name="149" href="#149">149</a>             }
+<a name="90" href="#90">90</a>  <em class="jxr_javadoccomment">     * List of "groupId:artifactId" dependencies to exclude.</em>
+<a name="91" href="#91">91</a>  <em class="jxr_javadoccomment">     * </em>
+<a name="92" href="#92">92</a>  <em class="jxr_javadoccomment">     * @parameter</em>
+<a name="93" href="#93">93</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="94" href="#94">94</a>      <strong class="jxr_keyword">private</strong> List&lt;String&gt; excludes;
+<a name="95" href="#95">95</a>  
+<a name="96" href="#96">96</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="97" href="#97">97</a>  <em class="jxr_javadoccomment">     * When true, don't JarJar the manifest.</em>
+<a name="98" href="#98">98</a>  <em class="jxr_javadoccomment">     * </em>
+<a name="99" href="#99">99</a>  <em class="jxr_javadoccomment">     * @parameter</em>
+<a name="100" href="#100">100</a> <em class="jxr_javadoccomment">     */</em>
+<a name="101" href="#101">101</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> skipManifest;
+<a name="102" href="#102">102</a> 
+<a name="103" href="#103">103</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="104" href="#104">104</a> <em class="jxr_javadoccomment">     * @component</em>
+<a name="105" href="#105">105</a> <em class="jxr_javadoccomment">     */</em>
+<a name="106" href="#106">106</a>     <strong class="jxr_keyword">private</strong> ArchiverManager archiverManager;
+<a name="107" href="#107">107</a> 
+<a name="108" href="#108">108</a>     @SuppressWarnings( <span class="jxr_string">"unchecked"</span> )
+<a name="109" href="#109">109</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute()
+<a name="110" href="#110">110</a>         <strong class="jxr_keyword">throws</strong> MojoExecutionException
+<a name="111" href="#111">111</a>     {
+<a name="112" href="#112">112</a>         <strong class="jxr_keyword">try</strong>
+<a name="113" href="#113">113</a>         {
+<a name="114" href="#114">114</a>             <em class="jxr_comment">// VALIDATE INPUT / OUTPUT</em>
+<a name="115" href="#115">115</a> 
+<a name="116" href="#116">116</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> == input &amp;&amp; <strong class="jxr_keyword">null</strong> != project.getArtifact() )
+<a name="117" href="#117">117</a>             {
+<a name="118" href="#118">118</a>                 input = project.getArtifact().getFile().getAbsolutePath();
+<a name="119" href="#119">119</a>             }
+<a name="120" href="#120">120</a>             <strong class="jxr_keyword">if</strong> ( <span class="jxr_string">"{classes}"</span>.equals( input ) )
+<a name="121" href="#121">121</a>             {
+<a name="122" href="#122">122</a>                 input = project.getBuild().getOutputDirectory();
+<a name="123" href="#123">123</a>             }
+<a name="124" href="#124">124</a>             <strong class="jxr_keyword">if</strong> ( <span class="jxr_string">"{test-classes}"</span>.equals( input ) )
+<a name="125" href="#125">125</a>             {
+<a name="126" href="#126">126</a>                 input = project.getBuild().getTestOutputDirectory();
+<a name="127" href="#127">127</a>             }
+<a name="128" href="#128">128</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> == input || !<strong class="jxr_keyword">new</strong> File( input ).exists() )
+<a name="129" href="#129">129</a>             {
+<a name="130" href="#130">130</a>                 getLog().info( <span class="jxr_string">"Nothing to process"</span> );
+<a name="131" href="#131">131</a>                 <strong class="jxr_keyword">return</strong>;
+<a name="132" href="#132">132</a>             }
+<a name="133" href="#133">133</a> 
+<a name="134" href="#134">134</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> == output )
+<a name="135" href="#135">135</a>             {
+<a name="136" href="#136">136</a>                 output = input;
+<a name="137" href="#137">137</a>             }
+<a name="138" href="#138">138</a> 
+<a name="139" href="#139">139</a>             <strong class="jxr_keyword">final</strong> File inputFile = <strong class="jxr_keyword">new</strong> File( input );
+<a name="140" href="#140">140</a>             <strong class="jxr_keyword">final</strong> File outputFile = <strong class="jxr_keyword">new</strong> File( output );
+<a name="141" href="#141">141</a> 
+<a name="142" href="#142">142</a>             <strong class="jxr_keyword">final</strong> File backupFile = <strong class="jxr_keyword">new</strong> File( outputFile.getParentFile(), <span class="jxr_string">"original-"</span> + outputFile.getName() );
+<a name="143" href="#143">143</a>             <strong class="jxr_keyword">if</strong> ( inputFile.equals( outputFile ) &amp;&amp; backupFile.exists() )
+<a name="144" href="#144">144</a>             {
+<a name="145" href="#145">145</a>                 getLog().info( <span class="jxr_string">"Already processed"</span> );
+<a name="146" href="#146">146</a>                 <strong class="jxr_keyword">return</strong>;
+<a name="147" href="#147">147</a>             }
+<a name="148" href="#148">148</a> 
+<a name="149" href="#149">149</a>             <em class="jxr_comment">// SETUP JARJAR</em>
 <a name="150" href="#150">150</a> 
-<a name="151" href="#151">151</a>             <em class="jxr_comment">// JARJAR UBER-JAR</em>
-<a name="152" href="#152">152</a> 
-<a name="153" href="#153">153</a>             getLog().info( <span class="jxr_string">"JarJar'ing to: "</span> + outputFile );
-<a name="154" href="#154">154</a>             StandaloneJarProcessor.run( uber, outputFile, processor );
-<a name="155" href="#155">155</a>             processor.strip( outputFile );
-<a name="156" href="#156">156</a> 
-<a name="157" href="#157">157</a>             uber.delete();
-<a name="158" href="#158">158</a>         }
-<a name="159" href="#159">159</a>         <strong class="jxr_keyword">catch</strong> ( <strong class="jxr_keyword">final</strong> Throwable e )
-<a name="160" href="#160">160</a>         {
-<a name="161" href="#161">161</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException( e.toString() );
-<a name="162" href="#162">162</a>         }
-<a name="163" href="#163">163</a>     }
-<a name="164" href="#164">164</a> }
+<a name="151" href="#151">151</a>             <strong class="jxr_keyword">final</strong> <a href="../../../com/tonicsystems/jarjar/MainProcessor.html">MainProcessor</a> processor = <strong class="jxr_keyword">new</strong> <a href="../../../com/tonicsystems/jarjar/MainProcessor.html">MainProcessor</a>( rules, getLog().isDebugEnabled(), skipManifest );
+<a name="152" href="#152">152</a>             <strong class="jxr_keyword">final</strong> AndArtifactFilter filter = <strong class="jxr_keyword">new</strong> AndArtifactFilter();
+<a name="153" href="#153">153</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> != includes )
+<a name="154" href="#154">154</a>             {
+<a name="155" href="#155">155</a>                 filter.add( <strong class="jxr_keyword">new</strong> StrictPatternIncludesArtifactFilter( includes ) );
+<a name="156" href="#156">156</a>             }
+<a name="157" href="#157">157</a>             <strong class="jxr_keyword">if</strong> ( <strong class="jxr_keyword">null</strong> != excludes )
+<a name="158" href="#158">158</a>             {
+<a name="159" href="#159">159</a>                 filter.add( <strong class="jxr_keyword">new</strong> StrictPatternExcludesArtifactFilter( excludes ) );
+<a name="160" href="#160">160</a>             }
+<a name="161" href="#161">161</a> 
+<a name="162" href="#162">162</a>             <em class="jxr_comment">// BUILD UBER-ZIP OF ARTIFACT + DEPENDENCIES</em>
+<a name="163" href="#163">163</a> 
+<a name="164" href="#164">164</a>             getLog().info( <span class="jxr_string">"Processing: "</span> + inputFile );
+<a name="165" href="#165">165</a> 
+<a name="166" href="#166">166</a>             <strong class="jxr_keyword">final</strong> File uberZip = <strong class="jxr_keyword">new</strong> File( workingDirectory, <span class="jxr_string">"uber-"</span> + inputFile.getName() );
+<a name="167" href="#167">167</a>             <strong class="jxr_keyword">final</strong> Archiver archiver = archiverManager.getArchiver( <span class="jxr_string">"zip"</span> );
+<a name="168" href="#168">168</a> 
+<a name="169" href="#169">169</a>             archiver.setDestFile( uberZip );
+<a name="170" href="#170">170</a>             archiver.setIncludeEmptyDirs( false );
+<a name="171" href="#171">171</a> 
+<a name="172" href="#172">172</a>             <strong class="jxr_keyword">if</strong> ( inputFile.isDirectory() )
+<a name="173" href="#173">173</a>             {
+<a name="174" href="#174">174</a>                 archiver.addDirectory( inputFile );
+<a name="175" href="#175">175</a>             }
+<a name="176" href="#176">176</a>             <strong class="jxr_keyword">else</strong>
+<a name="177" href="#177">177</a>             {
+<a name="178" href="#178">178</a>                 archiver.addArchivedFileSet( inputFile );
+<a name="179" href="#179">179</a>             }
+<a name="180" href="#180">180</a> 
+<a name="181" href="#181">181</a>             <strong class="jxr_keyword">for</strong> ( <strong class="jxr_keyword">final</strong> Artifact a : (Set&lt;Artifact&gt;) project.getArtifacts() )
+<a name="182" href="#182">182</a>             {
+<a name="183" href="#183">183</a>                 <strong class="jxr_keyword">if</strong> ( filter.include( a ) )
+<a name="184" href="#184">184</a>                 {
+<a name="185" href="#185">185</a>                     <strong class="jxr_keyword">try</strong>
+<a name="186" href="#186">186</a>                     {
+<a name="187" href="#187">187</a>                         archiver.addArchivedFileSet( a.getFile(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"META-INF/MANIFEST.MF"</span> } );
+<a name="188" href="#188">188</a>                     }
+<a name="189" href="#189">189</a>                     <strong class="jxr_keyword">catch</strong> ( <strong class="jxr_keyword">final</strong> Throwable e )
+<a name="190" href="#190">190</a>                     {
+<a name="191" href="#191">191</a>                         getLog().info( <span class="jxr_string">"Ignoring: "</span> + a );
+<a name="192" href="#192">192</a>                         getLog().debug( e );
+<a name="193" href="#193">193</a>                     }
+<a name="194" href="#194">194</a>                 }
+<a name="195" href="#195">195</a>             }
+<a name="196" href="#196">196</a> 
+<a name="197" href="#197">197</a>             archiver.createArchive();
+<a name="198" href="#198">198</a> 
+<a name="199" href="#199">199</a>             <em class="jxr_comment">// JARJAR UBER-ZIP</em>
+<a name="200" href="#200">200</a> 
+<a name="201" href="#201">201</a>             getLog().info( <span class="jxr_string">"JarJar'ing to: "</span> + outputFile );
+<a name="202" href="#202">202</a> 
+<a name="203" href="#203">203</a>             <strong class="jxr_keyword">final</strong> File hullZip = <strong class="jxr_keyword">new</strong> File( workingDirectory, <span class="jxr_string">"hull-"</span> + inputFile.getName() );
+<a name="204" href="#204">204</a> 
+<a name="205" href="#205">205</a>             StandaloneJarProcessor.run( uberZip, hullZip, processor );
+<a name="206" href="#206">206</a>             processor.strip( hullZip );
+<a name="207" href="#207">207</a> 
+<a name="208" href="#208">208</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> toDirectory = outputFile.isDirectory() || !outputFile.exists() &amp;&amp; inputFile.isDirectory();
+<a name="209" href="#209">209</a> 
+<a name="210" href="#210">210</a>             <strong class="jxr_keyword">if</strong> ( inputFile.equals( outputFile ) )
+<a name="211" href="#211">211</a>             {
+<a name="212" href="#212">212</a>                 <strong class="jxr_keyword">try</strong>
+<a name="213" href="#213">213</a>                 {
+<a name="214" href="#214">214</a>                     getLog().info( <span class="jxr_string">"Original: "</span> + backupFile );
+<a name="215" href="#215">215</a>                     FileUtils.rename( outputFile, backupFile );
+<a name="216" href="#216">216</a>                 }
+<a name="217" href="#217">217</a>                 <strong class="jxr_keyword">catch</strong> ( <strong class="jxr_keyword">final</strong> Throwable e )
+<a name="218" href="#218">218</a>                 {
+<a name="219" href="#219">219</a>                     getLog().warn( e.toString() );
+<a name="220" href="#220">220</a>                 }
+<a name="221" href="#221">221</a>             }
+<a name="222" href="#222">222</a> 
+<a name="223" href="#223">223</a>             <strong class="jxr_keyword">if</strong> ( toDirectory )
+<a name="224" href="#224">224</a>             {
+<a name="225" href="#225">225</a>                 outputFile.mkdirs();
+<a name="226" href="#226">226</a>                 <strong class="jxr_keyword">final</strong> UnArchiver unarchiver = archiverManager.getUnArchiver( <span class="jxr_string">"zip"</span> );
+<a name="227" href="#227">227</a>                 unarchiver.setDestDirectory( outputFile );
+<a name="228" href="#228">228</a>                 unarchiver.setSourceFile( hullZip );
+<a name="229" href="#229">229</a>                 unarchiver.extract();
+<a name="230" href="#230">230</a>             }
+<a name="231" href="#231">231</a>             <strong class="jxr_keyword">else</strong>
+<a name="232" href="#232">232</a>             {
+<a name="233" href="#233">233</a>                 FileUtils.copyFile( hullZip, outputFile );
+<a name="234" href="#234">234</a>             }
+<a name="235" href="#235">235</a>         }
+<a name="236" href="#236">236</a>         <strong class="jxr_keyword">catch</strong> ( <strong class="jxr_keyword">final</strong> Throwable e )
+<a name="237" href="#237">237</a>         {
+<a name="238" href="#238">238</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException( <span class="jxr_string">"Unable to JarJar: "</span> + input, e );
+<a name="239" href="#239">239</a>         }
+<a name="240" href="#240">240</a>     }
+<a name="241" href="#241">241</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
