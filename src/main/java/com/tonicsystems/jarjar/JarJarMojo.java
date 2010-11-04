@@ -139,6 +139,13 @@ public class JarJarMojo
             final File inputFile = new File( input );
             final File outputFile = new File( output );
 
+            final File backupFile = new File( outputFile.getParentFile(), "original-" + outputFile.getName() );
+            if ( inputFile.equals( outputFile ) && backupFile.exists() )
+            {
+                getLog().info( "Already processed" );
+                return;
+            }
+
             // SETUP JARJAR
 
             final MainProcessor processor = new MainProcessor( rules, getLog().isDebugEnabled(), skipManifest );
@@ -204,7 +211,6 @@ public class JarJarMojo
             {
                 try
                 {
-                    final File backupFile = new File( outputFile.getParentFile(), "original-" + outputFile.getName() );
                     getLog().info( "Original: " + backupFile );
                     FileUtils.rename( outputFile, backupFile );
                 }
