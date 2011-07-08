@@ -27,6 +27,9 @@ import java.util.*;
 public class StandaloneJarProcessor
 {
     public static void run(File from, File to, JarProcessor proc) throws IOException {
+        run(from, to, proc, false);
+    }
+    public static void run(File from, File to, JarProcessor proc, boolean ignoreDuplicates) throws IOException {
         byte[] buf = new byte[0x2000];
         File tmp = null;
         if (from.equals(to)) {
@@ -56,7 +59,7 @@ public class StandaloneJarProcessor
                         out.write(struct.data);
                     } else if (struct.name.endsWith("/")) {
                         // TODO(chrisn): log
-                    } else {
+                    } else if (!ignoreDuplicates) {
                         throw new IllegalArgumentException("Duplicate jar entries: " + struct.name);
                     }
                 }
