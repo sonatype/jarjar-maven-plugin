@@ -101,6 +101,13 @@ public class JarJarMojo
     private boolean skipManifest;
 
     /**
+     * When true, apply JarJar even if output already exists.
+     * 
+     * @parameter
+     */
+    private boolean overwrite;
+
+    /**
      * @component
      */
     private ArchiverManager archiverManager;
@@ -139,12 +146,14 @@ public class JarJarMojo
             final File inputFile = new File( input );
             final File outputFile = new File( output );
 
+            final boolean inPlaceJarJar = inputFile.equals( outputFile );
+
             final File backupFile = new File( outputFile.getParentFile(), "original-" + outputFile.getName() );
             if ( backupFile.isDirectory() && backupFile.list().length == 0 )
             {
                 backupFile.delete();
             }
-            if ( inputFile.equals( outputFile ) && backupFile.exists() )
+            if ( !overwrite && ( inPlaceJarJar && backupFile.exists() || !inPlaceJarJar && outputFile.exists() ) )
             {
                 getLog().info( "Already processed" );
                 return;
@@ -206,12 +215,12 @@ public class JarJarMojo
 
             final File hullZip = new File( workingDirectory, "hull-" + inputFile.getName() );
 
-            StandaloneJarProcessor.run( uberZip, hullZip, processor );
+            StandaloneJarProcessor.run( uberZip, hullZip, processor, true );
             processor.strip( hullZip );
 
             final boolean toDirectory = outputFile.isDirectory() || !outputFile.exists() && inputFile.isDirectory();
 
-            if ( inputFile.equals( outputFile ) )
+            if ( inPlaceJarJar )
             {
                 try
                 {
