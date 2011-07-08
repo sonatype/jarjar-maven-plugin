@@ -140,6 +140,10 @@ public class JarJarMojo
             final File outputFile = new File( output );
 
             final File backupFile = new File( outputFile.getParentFile(), "original-" + outputFile.getName() );
+            if ( backupFile.isDirectory() && backupFile.list().length == 0 )
+            {
+                backupFile.delete();
+            }
             if ( inputFile.equals( outputFile ) && backupFile.exists() )
             {
                 getLog().info( "Already processed" );
