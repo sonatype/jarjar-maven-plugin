@@ -207,6 +207,12 @@ public class JarJarMojo
                 }
             }
 
+            if ( !archiver.getResources().hasNext() )
+            {
+                getLog().info( "Nothing to JarJar" );
+                return;
+            }
+
             archiver.createArchive();
 
             // JARJAR UBER-ZIP
@@ -248,7 +254,7 @@ public class JarJarMojo
         }
         catch ( final Throwable e )
         {
-            throw new MojoExecutionException( "Unable to JarJar: " + input, e );
+            throw new MojoExecutionException( "Unable to JarJar: " + input + " cause: " + e.getMessage(), e );
         }
     }
 }
