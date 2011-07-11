@@ -36,7 +36,7 @@
 
   <ciManagement>
     <system>Hudson</system>
-    <url>https://grid.sonatype.org/ci/job/jarjar-maven-plugin/</url>
+    <url>https://builds.sonatype.org/job/jarjar-maven-plugin/</url>
   </ciManagement>
 
   <licenses>
