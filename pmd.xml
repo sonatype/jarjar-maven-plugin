@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-11-04T12:16:53.563">
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/DepFind.java">
+<pmd version="4.2.2" timestamp="2011-07-12T00:42:19.501">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/DepFind.java">
 <violation beginline="22" endline="22" begincolumn="1" endcolumn="30" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.util.zip.ZipEntry'
 </violation>
@@ -8,7 +8,7 @@ Avoid unused imports such as 'java.util.zip.ZipEntry'
 Avoid unused imports such as 'org.objectweb.asm.ClassVisitor'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/DepFindVisitor.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/DepFindVisitor.java">
 <violation beginline="22" endline="22" begincolumn="1" endcolumn="30" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.util.zip.ZipEntry'
 </violation>
@@ -22,12 +22,12 @@ Avoid duplicate imports such as 'org.objectweb.asm.Type'
 Avoid unused imports such as 'org.objectweb.asm.Type'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/JarJarTask.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/JarJarTask.java">
 <violation beginline="20" endline="20" begincolumn="1" endcolumn="20" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.io.File'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java">
 <violation beginline="23" endline="23" begincolumn="8" endcolumn="29" rule="DuplicateImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#DuplicateImports" priority="4">
 Avoid duplicate imports such as 'org.objectweb.asm.Type'
 </violation>
@@ -41,7 +41,7 @@ Avoid unused private fields such as 'buf'.
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/Main.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/Main.java">
 <violation beginline="45" endline="45" begincolumn="19" endcolumn="25" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.tonicsystems.jarjar" class="Main" variable="verbose" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'verbose'.
 </violation>
@@ -52,17 +52,17 @@ Avoid unused private fields such as 'patterns'.
 Avoid unused private fields such as 'level'.
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java">
 <violation beginline="78" endline="80" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.tonicsystems.jarjar" class="PackageRemapper" method="mapPath" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/ClassHeaderReader.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/ClassHeaderReader.java">
 <violation beginline="63" endline="65" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.tonicsystems.jarjar.util" class="ClassHeaderReader" method="read" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/EntryStruct.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/EntryStruct.java">
 <violation beginline="19" endline="19" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.io.InputStream'
 </violation>
@@ -70,17 +70,17 @@ Avoid unused imports such as 'java.io.InputStream'
 Avoid unused imports such as 'java.io.File'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/GetNameClassWriter.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/GetNameClassWriter.java">
 <violation beginline="20" endline="20" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'org.objectweb.asm.ClassReader'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/JarTransformerChain.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/JarTransformerChain.java">
 <violation beginline="20" endline="20" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.io.IOException'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/RemappingClassTransformer.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/RemappingClassTransformer.java">
 <violation beginline="23" endline="23" begincolumn="1" endcolumn="39" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'org.objectweb.asm.MethodVisitor'
 </violation>
@@ -91,14 +91,14 @@ Avoid unused imports such as 'org.objectweb.asm.Type'
 Avoid unused imports such as 'org.objectweb.asm.commons.RemappingMethodAdapter'
 </violation>
 </file>
-<file name="/Users/mcculls/Code/jarjar-maven-plugin/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java">
+<file name="/Users/mcculls/Code/maven-plugins/jarjar-maven-plugin/target/checkout/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java">
 <violation beginline="22" endline="22" begincolumn="8" endcolumn="28" rule="DuplicateImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#DuplicateImports" priority="4">
 Avoid duplicate imports such as 'java.util.Enumeration'
 </violation>
 <violation beginline="23" endline="23" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="com.tonicsystems.jarjar.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.util.zip.ZipOutputStream'
 </violation>
-<violation beginline="57" endline="59" begincolumn="59" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="com.tonicsystems.jarjar.util" class="StandaloneJarProcessor" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+<violation beginline="60" endline="62" begincolumn="59" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="com.tonicsystems.jarjar.util" class="StandaloneJarProcessor" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
 Avoid empty if statements
 </violation>
 </file>
