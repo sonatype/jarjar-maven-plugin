@@ -1,0 +1,58 @@
+---------------------------------------------------------------------------------------------------
+Apart from the complete rewrite of JarJarMojo, the following patches are applied to the JarJar code
+---------------------------------------------------------------------------------------------------
+
+commit 8e39d8abc8deb8eac3451f781a711c84f594301e
+Author: Jason van Zyl <jason@sonatype.com>
+Date:   Sun Mar 18 22:41:55 2012 -0400
+
+    o eliminating javax from the rule processing causes problems with things like javax.inject.**
+    
+      in the context of Maven I don't believe we're ever going to give JarJar direct access to the JRE where
+      everything can be pulled in.
+    
+      in my case here where i am making a self-contained JSR330-based server removing the javax restricted resulted
+      in a working uber jar.
+
+diff --git a/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java b/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java
+index cce768c..b505860 100644
+--- a/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java
++++ b/src/main/java/com/tonicsystems/jarjar/KeepProcessor.java
+@@ -75,7 +75,7 @@ class KeepProcessor extends Remapper implements JarProcessor
+     }
+ 
+     public String map(String key) {
+-        if (key.startsWith("java/") || key.startsWith("javax/"))
++        if (key.startsWith("java/"))
+             return null;
+         curSet.add(key);
+         return null;
+commit 2df8dde80442150c7c061f237bf26e3617a446a4
+Author: Stuart McCulloch <mcculls@Stuart-McCullochs-MacBook-Pro.local>
+Date:   Fri Jul 8 20:59:24 2011 +0100
+
+    Allow duplicate entries to be ignored
+
+diff --git a/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java b/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java
+index ec1ab74..f54785e 100644
+--- a/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java
++++ b/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java
+@@ -27,6 +27,9 @@ import java.util.*;
+ public class StandaloneJarProcessor
+ {
+     public static void run(File from, File to, JarProcessor proc) throws IOException {
++        run(from, to, proc, false);
++    }
++    public static void run(File from, File to, JarProcessor proc, boolean ignoreDuplicates) throws IOException {
+         byte[] buf = new byte[0x2000];
+         File tmp = null;
+         if (from.equals(to)) {
+@@ -56,7 +59,7 @@ public class StandaloneJarProcessor
+                         out.write(struct.data);
+                     } else if (struct.name.endsWith("/")) {
+                         // TODO(chrisn): log
+-                    } else {
++                    } else if (!ignoreDuplicates) {
+                         throw new IllegalArgumentException("Duplicate jar entries: " + struct.name);
+                     }
+                 }

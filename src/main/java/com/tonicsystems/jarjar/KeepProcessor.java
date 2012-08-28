@@ -26,7 +26,7 @@ import org.objectweb.asm.commons.*;
 // TODO: this can probably be refactored into JarClassVisitor, etc.
 class KeepProcessor extends Remapper implements JarProcessor
 {
-    private final ClassVisitor cv = new RemappingClassAdapter(new EmptyVisitor(), this);
+    private final ClassVisitor cv = new RemappingClassAdapter(new EmptyClassVisitor(), this);
     private final List<Wildcard> wildcards;
     private final List<String> roots = new ArrayList<String>();
     private final Map<String, Set<String>> depend = new HashMap<String, Set<String>>();
@@ -67,10 +67,13 @@ class KeepProcessor extends Remapper implements JarProcessor
                     if (wildcard.matches(name))
                         roots.add(name);
                 depend.put(name, curSet = new HashSet<String>());
-                new ClassReader(new ByteArrayInputStream(struct.data)).accept(cv, 0);
+                new ClassReader(new ByteArrayInputStream(struct.data)).accept(cv,
+                    ClassReader.EXPAND_FRAMES);
                 curSet.remove(name);
             }
-        } catch (Exception ignore) { }
+        } catch (Exception e) {
+          System.err.println("Error reading " + struct.name + ": " + e.getMessage());
+        }
         return true;
     }
 
