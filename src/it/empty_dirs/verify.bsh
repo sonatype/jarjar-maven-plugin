@@ -1,0 +1,36 @@
+import java.io.*;
+import java.util.jar.JarFile;
+
+JarFile getFile() {
+    File file = new File(basedir, "target/out.jar" );
+    if ( !file.isFile() ) {
+        throw new FileNotFoundException( "Could not find generated JAR: " + file );
+    }
+    return new JarFile(file);
+}
+
+mustNotExist(JarFile file, String path) {
+    if (file.getEntry(path) != null)
+        throw new RuntimeException(path + " should not be in "+file.getName());
+}
+
+mustExist(JarFile file, String path) {
+    if (file.getEntry(path) == null)
+        throw new RuntimeException(path + " should be in "+file.getName());
+}
+
+verifyNoEmptyDir() {
+    mustNotExist(getFile(), "test/empty/");
+}
+
+verifyDirWithFilesIsPresent() {
+    mustExist(getFile(), "test/has_file/");
+}
+
+testDirectoriesCreatedByRulesAreIncluded() {
+    mustExist(getFile(), "com/test/junit/");
+}
+
+verifyNoEmptyDir();
+verifyDirWithFilesIsPresent();
+testDirectoriesCreatedByRulesAreIncluded();
