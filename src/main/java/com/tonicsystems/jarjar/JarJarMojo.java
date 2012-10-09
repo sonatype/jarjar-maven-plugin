@@ -180,7 +180,6 @@ public class JarJarMojo
             final Archiver archiver = archiverManager.getArchiver( "zip" );
 
             archiver.setDestFile( uberZip );
-            archiver.setIncludeEmptyDirs( false );
 
             if ( inputFile.isDirectory() )
             {
