@@ -76,7 +76,10 @@ class PackageRemapper extends Remapper
             if (absolute) s = "/" + s;
             if (s.indexOf(RESOURCE_SUFFIX) < 0)
               return path;
-            s = s.substring(0, s.length() - RESOURCE_SUFFIX.length()) + end;
+            if (end.length() > 0)
+              s = s.substring(0, s.length() - RESOURCE_SUFFIX.length()) + end;
+            else
+              s = s.substring(0, s.lastIndexOf('/') + 1);
             pathCache.put(path, s);
         }
         return s;
