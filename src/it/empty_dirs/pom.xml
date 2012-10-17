@@ -37,8 +37,12 @@
               </includes>
               <rules>
                 <rule>
-                  <pattern>junit.**</pattern>
-                  <result>com.test.@0</result>
+                  <pattern>junit.*</pattern>
+                  <result>com.test.junit.PREFIX@1</result>
+                </rule>
+                <rule>
+                  <pattern>junit.**.*</pattern>
+                  <result>com.test.junit.@1.PREFIX@2</result>
                 </rule>
               </rules>
             </configuration>

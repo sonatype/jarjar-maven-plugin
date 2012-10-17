@@ -31,6 +31,12 @@ testDirectoriesCreatedByRulesAreIncluded() {
     mustExist(getFile(), "com/test/junit/");
 }
 
+testMappedDirectoriesDoNotBecomeFiles() {
+    mustNotExist(getFile(), "com/test/junit/PREFIX");
+}
+
 verifyNoEmptyDir();
 verifyDirWithFilesIsPresent();
 testDirectoriesCreatedByRulesAreIncluded();
+testMappedDirectoriesDoNotBecomeFiles();
+
