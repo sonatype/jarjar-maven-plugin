@@ -56,3 +56,44 @@ index ec1ab74..f54785e 100644
                          throw new IllegalArgumentException("Duplicate jar entries: " + struct.name);
                      }
                  }
+commit c963da03aba8ca8eda53ec48173cb2640815fe89
+Author: Stuart McCulloch <mcculls@gmail.com>
+Date:   Thu Oct 4 21:20:20 2012 +0100
+
+    Remove Java6-ism
+
+diff --git a/src/main/java/com/tonicsystems/jarjar/RulesFileParser.java b/src/main/java/com/tonicsystems/jarjar/RulesFileParser.java
+index f54f3b9..268c35a 100644
+--- a/src/main/java/com/tonicsystems/jarjar/RulesFileParser.java
++++ b/src/main/java/com/tonicsystems/jarjar/RulesFileParser.java
+@@ -45,7 +45,7 @@ class RulesFileParser
+         String line;
+         while ((line = br.readLine()) != null) {
+             line = stripComment(line);
+-            if (line.isEmpty())
++            if (line.length()==0)
+                 continue;
+             String[] parts = line.split("\\s+");
+             if (parts.length < 2)
+commit d880def9bc0886c1cce4f39f41cbc9aa83678bd4
+Author: Stuart McCulloch <mcculls@gmail.com>
+Date:   Wed Oct 17 16:49:32 2012 +0100
+
+    Stop package remapper from changing directories into files when applying rules that add prefixes to resources
+
+diff --git a/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java b/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java
+index 4d102be..4f2b2ab 100644
+--- a/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java
++++ b/src/main/java/com/tonicsystems/jarjar/PackageRemapper.java
+@@ -76,7 +76,10 @@ class PackageRemapper extends Remapper
+             if (absolute) s = "/" + s;
+             if (s.indexOf(RESOURCE_SUFFIX) < 0)
+               return path;
+-            s = s.substring(0, s.length() - RESOURCE_SUFFIX.length()) + end;
++            if (end.length() > 0)
++              s = s.substring(0, s.length() - RESOURCE_SUFFIX.length()) + end;
++            else
++              s = s.substring(0, s.lastIndexOf('/') + 1);
+             pathCache.put(path, s);
+         }
+         return s;
