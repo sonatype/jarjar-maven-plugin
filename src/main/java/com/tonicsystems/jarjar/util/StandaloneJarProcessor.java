@@ -62,8 +62,12 @@ public class StandaloneJarProcessor
 
         }
         finally {
-            in.close();
-            out.close();
+            try {
+                in.close();
+            } catch (IOException e) {}
+            try {
+                out.close();
+            } catch (IOException e) {}
         }
 
          // delete the empty directories
