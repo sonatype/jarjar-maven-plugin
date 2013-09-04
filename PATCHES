@@ -97,3 +97,28 @@ index 4d102be..4f2b2ab 100644
              pathCache.put(path, s);
          }
          return s;
+commit d3f8e05c4330a051fe2dd75a6ce5e63d419531fb
+Author: Stuart McCulloch <mcculls@gmail.com>
+Date:   Wed Sep 4 11:00:31 2013 +0100
+
+    Stop exceptions in finally block from hiding the original cause
+
+diff --git a/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java b/src/main/java/com/tonicsystems/jar
+index 1239a19..9eaeb10 100644
+--- a/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java
++++ b/src/main/java/com/tonicsystems/jarjar/util/StandaloneJarProcessor.java
+@@ -62,8 +62,12 @@ public class StandaloneJarProcessor
+ 
+         }
+         finally {
+-            in.close();
+-            out.close();
++            try {
++                in.close();
++            } catch (IOException e) {}
++            try {
++                out.close();
++            } catch (IOException e) {}
+         }
+ 
+          // delete the empty directories
