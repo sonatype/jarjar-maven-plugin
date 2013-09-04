@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="45" href="#45">45</a>          String line;
 <a class="jxr_linenumber" name="46" href="#46">46</a>          <strong class="jxr_keyword">while</strong> ((line = br.readLine()) != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="47" href="#47">47</a>              line = stripComment(line);
-<a class="jxr_linenumber" name="48" href="#48">48</a>              <strong class="jxr_keyword">if</strong> (line.isEmpty())
+<a class="jxr_linenumber" name="48" href="#48">48</a>              <strong class="jxr_keyword">if</strong> (line.length()==0)
 <a class="jxr_linenumber" name="49" href="#49">49</a>                  <strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="50" href="#50">50</a>              String[] parts = line.split(<span class="jxr_string">"&#92;&#92;s+"</span>);
 <a class="jxr_linenumber" name="51" href="#51">51</a>              <strong class="jxr_keyword">if</strong> (parts.length &lt; 2)
