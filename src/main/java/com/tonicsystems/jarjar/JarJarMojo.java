@@ -45,6 +45,12 @@ public class JarJarMojo
     extends AbstractMojo
 {
     /**
+     * Exclude the following META-INF files when jarjar'ing project dependencies.
+     */
+    private static final String[] META_INF_EXCLUDES = { "META-INF/MANIFEST.MF", //
+        "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA" }; // signature files
+
+    /**
      * @parameter expression="${project}"
      * @required
      * @readonly
@@ -196,7 +202,7 @@ public class JarJarMojo
                 {
                     try
                     {
-                        archiver.addArchivedFileSet( a.getFile(), null, new String[] { "META-INF/MANIFEST.MF" } );
+                        archiver.addArchivedFileSet( a.getFile(), null, META_INF_EXCLUDES );
                     }
                     catch ( final Throwable e )
                     {
