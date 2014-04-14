@@ -13,7 +13,7 @@
 
   <groupId>org.sonatype.plugins</groupId>
   <artifactId>jarjar-maven-plugin</artifactId>
-  <version>1.9-SNAPSHOT</version>
+  <version>1.9</version>
 
   <name>JarJar Maven Plugin</name>
 
@@ -32,6 +32,7 @@
     <connection>scm:git:git@github.com:sonatype/jarjar-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:sonatype/jarjar-maven-plugin.git</developerConnection>
     <url>http://github.com/sonatype/jarjar-maven-plugin</url>
+    <tag>jarjar-maven-plugin-1.9</tag>
   </scm>
 
   <ciManagement>
