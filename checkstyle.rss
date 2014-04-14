@@ -6,10 +6,10 @@
     <link>http://github.com/sonatype/jarjar-maven-plugin</link>
     <description>JarJar Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2010 - 2013 Sonatype, Inc.</copyright>
+    <copyright>&#169;2010 - 2014 Sonatype, Inc.</copyright>
     <item>
       <title>File: 40,
-             Errors: 1058,
+             Errors: 1062,
              Warnings: 0,
              Infos: 0
       </title>
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  45
+                  49
                 </td>
               </tr>
                           <tr>
