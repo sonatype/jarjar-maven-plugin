@@ -70,14 +70,30 @@ class IoUtil {
             final ArrayList<ZipEntry> sortedList = new ArrayList<ZipEntry>();
             while (e.hasMoreElements()) {
                 final ZipEntry entry = e.nextElement();
-                sortedList.add(entry);
+                // META-INF/ doesn't need a directory entry
+                if (!"META-INF/".equals(entry.getName())) {
+                    sortedList.add(entry);
+                }
             }
 
             Collections.sort(sortedList, new Comparator<ZipEntry>()
             {
                 public int compare(ZipEntry o1, ZipEntry o2)
                 {
-                    return o1.getName().compareTo(o2.getName());
+                    String n1 = o1.getName(), n2 = o2.getName();
+                    if (metaOverride(n1, n2)) {
+                        return -1;
+                    }
+                    if (metaOverride(n2, n1)) {
+                        return 1;
+                    }
+                    return n1.compareTo(n2);
+                }
+
+                // make sure that META-INF/MANIFEST.MF is always the very first entry
+                private boolean metaOverride(String n1, String n2) {
+                    return (n1.startsWith("META-INF/") && !n2.startsWith("META-INF/"))
+                        || (n1.equals("META-INF/MANIFEST.MF") && !n2.equals(n1));
                 }
             });
 
@@ -105,25 +121,27 @@ class IoUtil {
                     isEmptyDirectory = false;
                 }
 
-
-                // write the entry
                 if (isEmptyDirectory)
                 {
-                    sortedList.remove(inputEntry);
+                    sortedList.remove(i);
                 }
-                else
-                {
-                    final ZipEntry outputEntry = new ZipEntry(inputEntry);
-                    outputStream.putNextEntry(outputEntry);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    final InputStream is = inputZip.getInputStream(inputEntry);
-                    IoUtil.pipe(is, baos, buf);
-                    is.close();
-                    outputStream.write(baos.toByteArray());
-                }
+            }
+
+            // finally write entries in normal order
+            for (int i = 0; i < sortedList.size(); i++)
+            {
+                final ZipEntry inputEntry = sortedList.get(i);
+                final ZipEntry outputEntry = new ZipEntry(inputEntry);
+                outputStream.putNextEntry(outputEntry);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                final InputStream is = inputZip.getInputStream(inputEntry);
+                IoUtil.pipe(is, baos, buf);
+                is.close();
+                outputStream.write(baos.toByteArray());
             }
         } finally {
             outputStream.close();
+            inputZip.close();
         }
 
     }
