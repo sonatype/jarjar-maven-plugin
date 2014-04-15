@@ -70,10 +70,7 @@ class IoUtil {
             final ArrayList<ZipEntry> sortedList = new ArrayList<ZipEntry>();
             while (e.hasMoreElements()) {
                 final ZipEntry entry = e.nextElement();
-                // META-INF/ doesn't need a directory entry
-                if (!"META-INF/".equals(entry.getName())) {
-                    sortedList.add(entry);
-                }
+                sortedList.add(entry);
             }
 
             Collections.sort(sortedList, new Comparator<ZipEntry>()
@@ -90,10 +87,11 @@ class IoUtil {
                     return n1.compareTo(n2);
                 }
 
-                // make sure that META-INF/MANIFEST.MF is always the very first entry
+                // make sure that META-INF/MANIFEST.MF is always the first entry after META-INF/
                 private boolean metaOverride(String n1, String n2) {
                     return (n1.startsWith("META-INF/") && !n2.startsWith("META-INF/"))
-                        || (n1.equals("META-INF/MANIFEST.MF") && !n2.equals(n1));
+                        || (n1.equals("META-INF/MANIFEST.MF") && !n2.equals(n1) && !n2.equals("META-INF/"))
+                        || (n1.equals("META-INF/") && !n2.equals(n1));
                 }
             });
 
