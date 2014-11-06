@@ -126,7 +126,7 @@ public class JarJarMojo
         {
             // VALIDATE INPUT / OUTPUT
 
-            if ( null == input && null != project.getArtifact() )
+            if ( null == input && null != project.getArtifact() && null != project.getArtifact().getFile() )
             {
                 input = project.getArtifact().getFile().getAbsolutePath();
             }
